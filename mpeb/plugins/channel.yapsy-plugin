@@ -1,0 +1,6 @@
+[Core]
+Name = Channel Plugin
+Module = channel
+
+[Documentation]
+Author = Robert Schmidt
