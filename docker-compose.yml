@@ -1,0 +1,6 @@
+mpeb:
+  build: .
+  volumes:
+    - .:/software/mpeb
+  environment:
+    - PYTHONPATH=/software/mpeb

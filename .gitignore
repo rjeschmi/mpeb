@@ -1,3 +1,4 @@
 MonkeyPatchEasyBuild.egg-info/
 build/
 dist/
+*.pyc
