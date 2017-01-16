@@ -10,13 +10,13 @@ from mpeb.pluginmanager import PM
 def main():
     """The main sub"""
     args = sys.argv[1:]
-    #Setup Parser
+    # Setup Parser
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--debug", action='store_true')
     subparsers = parser.add_subparsers(help='sub-command help')
     PM.collectPlugins()
-    for plugin in PM.getAllPlugins():
-        print "loading plugins"
+    for plugin in PM.getPluginsOfCategory("cli"):
+        print "loading plugins %s" % plugin.name
         plugin.plugin_object.set_options(subparsers)
 
     args = parser.parse_args()

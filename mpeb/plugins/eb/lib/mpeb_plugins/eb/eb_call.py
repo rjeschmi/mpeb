@@ -5,8 +5,11 @@ import sys
 import argparse
 import glob
 import subprocess
+import importlib
+
 from subprocess import check_call, PIPE
 from multiprocessing import Process
+
 
 def module(command, arguments=[]):
     cmd = ['/software/Lmod/lmod/lmod/libexec/lmod', 'python'] + [command] + arguments
@@ -31,7 +34,7 @@ def path_addto(destpath, srcpath):
 
 def eb_main_call(*args, **kwargs):
     """A function that will be demoted and call eb_main_call"""
-    demote()()
+    #demote()()
     args = kwargs.get('args', None)
     import easybuild.main as eb_main
     eb_main.main(args=args)
@@ -52,3 +55,9 @@ def demote():
         os.setgid(1000)
         os.setuid(1000)
     return set_ids
+
+
+def add_hooks(module):
+    '''Add module_pre and module_post hooks'''
+
+     

@@ -1,10 +1,10 @@
 """A sub-command"""
 import os, sys
 import logging
-from yapsy.IPlugin import IPlugin
+from mpeb.pluginmanager import ICLIPlugin
 
 
-class EB(IPlugin):
+class EB(ICLIPlugin):
     '''Setup a channel to track plugins from a remote location'''
 
     def set_options(self, subparsers):
@@ -13,7 +13,7 @@ class EB(IPlugin):
         eb_parser.add_argument('eb_args', nargs='+')
 
         eb_parser.set_defaults(func=self.call_eb)
-        print "Setting channel options"
+        print "Setting eb options"
 
     def append_sys_path(self):
         '''Append the global syspath relative to this file'''

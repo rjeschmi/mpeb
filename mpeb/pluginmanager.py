@@ -3,9 +3,15 @@
 import os
 import logging
 from ConfigParser import SafeConfigParser
+from yapsy.IPlugin import IPlugin
 from yapsy.PluginManager import PluginManagerSingleton
 from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 from yapsy.AutoInstallPluginManager import  AutoInstallPluginManager
+
+class ICLIPlugin(IPlugin):
+    def set_options(self, subparsers):
+        pass
+
 
 #Some defaults
 MAIN_DIR = os.path.dirname(__file__)
@@ -28,3 +34,7 @@ PM = PluginManagerSingleton.get()
 
 #PM.setConfigParser(CONFIG_FILE, write_config)
 PM.setPluginPlaces([PLUGINS_DIR, CORE_PLUGIN_DIR])
+PM.setCategoriesFilter({
+   "cli" : ICLIPlugin,
+})
+
