@@ -4,16 +4,8 @@ import logging
 from mpeb.pluginmanager import ICLIPlugin
 
 
-class EB(ICLIPlugin):
+class EB(Object):
     '''Setup a channel to track plugins from a remote location'''
-
-    def set_options(self, subparsers):
-        '''Add sub options to the main option parser'''
-        eb_parser = subparsers.add_parser('eb', help="A command to call eb")
-        eb_parser.add_argument('eb_args', nargs='+')
-
-        eb_parser.set_defaults(func=self.call_eb)
-        print "Setting eb options"
 
     def append_sys_path(self):
         '''Append the global syspath relative to this file'''

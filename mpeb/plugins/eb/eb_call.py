@@ -57,7 +57,8 @@ def demote():
     return set_ids
 
 
-def add_hooks(module):
+def add_hooks(module_name, function):
     '''Add module_pre and module_post hooks'''
 
-     
+    module = importlib.import_module(module_name)
+    module.function 

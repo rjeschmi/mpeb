@@ -4,20 +4,21 @@ import os
 import sys
 import argparse
 import logging
-from mpeb.pluginmanager import PM
+import mpeb.config as config
 
+def prepare(args):
+    
 
 def main():
     """The main sub"""
     args = sys.argv[1:]
     # Setup Parser
-    parser = argparse.ArgumentParser()
+    try: 
+        config = prepare(args)parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--debug", action='store_true')
     subparsers = parser.add_subparsers(help='sub-command help')
-    PM.collectPlugins()
-    for plugin in PM.getPluginsOfCategory("cli"):
-        print "loading plugins %s" % plugin.name
-        plugin.plugin_object.set_options(subparsers)
+    pm.get_plugin_manager()
+    pm.hook.mpeb_set_options()
 
     args = parser.parse_args()
     print "args: %s" % args
