@@ -1,28 +1,35 @@
 '''The main package that will house the function main() as the entrypoint'''
 
+import py
 import os
 import sys
 import argparse
 import logging
+import traceback
+
 import mpeb.config as config
+from mpeb.config import parseconfig
+import pprint
 
 def prepare(args):
-    
+    config = parseconfig(args)
+    pprint.pprint(config)
+    if config.option.help:
+        show_help(config)
+        raise SystemExit(0)
+    return config  
 
 def main():
     """The main sub"""
     args = sys.argv[1:]
     # Setup Parser
-    try: 
-        config = prepare(args)parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--debug", action='store_true')
-    subparsers = parser.add_subparsers(help='sub-command help')
-    pm.get_plugin_manager()
-    pm.hook.mpeb_set_options()
+    config = prepare(args)
+    return config.hook.mpeb_cmdline_main(config=config)
 
-    args = parser.parse_args()
-    print "args: %s" % args
-    if args.debug == True:
-        logging.basicConfig(level=logging.DEBUG)
 
-    args.func(args)
+def show_help(config):
+    tw = py.io.TerminalWriter()
+    tw.write(config._parser._format_help())
+    tw.line()
+    tw.line("Environment variables", bold=True)
+

@@ -1,8 +1,12 @@
 from pluggy import HookspecMarker, HookimplMarker
 
-hookspec = HookspecMarker('mpeb')
+hookspec = HookspecMarker("mpeb")
+hookimpl = HookimplMarker("mpeb")
 
-
-@hookspec(historic=True)
+@hookspec()
 def mpeb_addoption(parser):
     """register arparse-style options"""
+
+@hookspec()
+def mpeb_cmdline_main(config):
+    """the run loop"""

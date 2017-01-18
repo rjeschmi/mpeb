@@ -1,5 +1,7 @@
 import logging
 
+from .hookspecs import hookspec, hookimpl  # noqa
+
 # set up logging to file - see previous section for more details
 logging.basicConfig(level=logging.WARN,
                     format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
