@@ -27,8 +27,6 @@ class Parser:
         return self.argparser.add_argument(*args, **kwargs)
 
     def addsubparser(self, *args, **kwargs):
-        print args
-        print kwargs
         return self.argparser.add_subparsers(*args, **kwargs)
 
     def _parse_args(self, args):

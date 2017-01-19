@@ -10,3 +10,7 @@ def mpeb_addoption(parser):
 @hookspec()
 def mpeb_cmdline_main(config):
     """the run loop"""
+
+@hookspec()
+def mpeb_prerun_main(config):
+    """wrap things here"""

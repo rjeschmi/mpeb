@@ -2,3 +2,6 @@ MonkeyPatchEasyBuild.egg-info/
 build/
 dist/
 *.pyc
+*.swp
+.cache
+__pycache__

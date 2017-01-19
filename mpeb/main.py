@@ -13,7 +13,6 @@ import pprint
 
 def prepare(args):
     config = parseconfig(args)
-    pprint.pprint(config)
     if config.option.help:
         show_help(config)
         raise SystemExit(0)
@@ -24,12 +23,12 @@ def main():
     args = sys.argv[1:]
     # Setup Parser
     config = prepare(args)
-    return config.hook.mpeb_cmdline_main(config=config)
+    config.hook.mpeb_prerun_main(config=config)
+    config.hook.mpeb_cmdline_main(config=config)
 
 
 def show_help(config):
     tw = py.io.TerminalWriter()
     tw.write(config._parser._format_help())
     tw.line()
-    tw.line("Environment variables", bold=True)
 

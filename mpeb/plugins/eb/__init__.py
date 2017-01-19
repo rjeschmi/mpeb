@@ -6,7 +6,6 @@ def mpeb_addoption(parser):
     parser.addoption('--eb', dest='eb', action='store_true')
     parser.addoption('--ebargs', dest='eb_args')
 
-    print "Setting eb options"
 
 @mpeb.hookimpl
 def mpeb_cmdline_main(config):
