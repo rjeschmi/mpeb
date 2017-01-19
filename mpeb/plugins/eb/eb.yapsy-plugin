@@ -1,6 +1,0 @@
-[Core]
-Name = Just Call EB Plugin
-Module = eb
-
-[Documentation]
-Author = Robert Schmidt
