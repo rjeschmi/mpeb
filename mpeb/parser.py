@@ -16,9 +16,12 @@ class Parser:
         there's an error processing the command line arguments.
     """
 
-    def __init__(self):
+    def __init__(self, subparser=False):
         self.argparser = argparse.ArgumentParser(
                  description="mpeb options", add_help=False)
+        if subparser:
+            self.subparsers = self.argparser.add_subparsers()
+            self.subparser = {}
 
     def addoption(self, *args, **kwargs):
         """ add argument to command line parser.  This takes the
@@ -26,11 +29,13 @@ class Parser:
         """
         return self.argparser.add_argument(*args, **kwargs)
 
-    def addsubparser(self, *args, **kwargs):
-        return self.argparser.add_subparsers(*args, **kwargs)
+    def addsubparser(self, title, description=None, help=None ):
+        self.subparser[title]=self.subparsers.add_parser(title, description=description)
+        return self.subparser[title]
 
     def _parse_args(self, args):
-        return self.argparser.parse_args(args)
+        self.namespace, self.extra = self.argparser.parse_known_args(args)
+        return self.namespace
 
     def _format_help(self):
         return self.argparser.format_help()

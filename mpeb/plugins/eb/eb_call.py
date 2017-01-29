@@ -34,15 +34,22 @@ def path_addto(destpath, srcpath):
 
 def eb_main_call(*args, **kwargs):
     """A function that will be demoted and call eb_main_call"""
-    #demote()()
+    demotearg = kwargs.get('demote', False)
+    if demotearg:
+        demote()()
     args = kwargs.get('args', None)
     import easybuild.main as eb_main
-    eb_main.main(args=args)
+    from easybuild.tools.build_log import EasyBuildError
+    try:
+        eb_main.main(args=args)
+    except EasyBuildError, err:
+        print "Got EB Error %s" % err
 
-def eb_call(arguments, *args, **kwargs):
+
+def eb_call(arguments, demote, *args, **kwargs):
     opt_args = []
     try:
-        eb_kwargs = {'args': arguments}
+        eb_kwargs = {'args': arguments, 'demote': demote}
         process = Process(target=eb_main_call, kwargs=eb_kwargs)
         process.start()
         process.join()

@@ -23,6 +23,7 @@ def main():
     args = sys.argv[1:]
     # Setup Parser
     config = prepare(args)
+    config.hook.mpeb_setup()
     config.hook.mpeb_prerun_main(config=config)
     config.hook.mpeb_cmdline_main(config=config)
 

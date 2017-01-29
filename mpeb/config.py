@@ -15,7 +15,7 @@ import importlib
 
 import pprint
 
-default_plugins = ("eb rpm helpconfig debug").split()
+default_plugins = ("eb bininst helpconfig debug server").split()
 
 
 
@@ -52,46 +52,16 @@ def parseconfig(args=None, plugins=()):
         args = sys.argv[1:]
 
     # prepare command line options
-    parser = Parser()
+    parser = Parser(subparser=True)
     pm.hook.mpeb_addoption(parser=parser)
 
     # parse command line options
     option = parser._parse_args(args)
     config = Config(pluginmanager=pm, option=option)
     config._parser = parser
+    config.extraargs = parser.extra
 
     return config
-
-
-def _prepareconfig(args=None, plugins=None):
-    warning = None
-    if args is None:
-        args = sys.argv[1:]
-    elif isinstance(args, py.path.local):
-        args = [str(args)]
-    elif not isinstance(args, (tuple, list)):
-        if not isinstance(args, str):
-            raise ValueError("not a string or argument list: %r" % (args,))
-        args = shlex.split(args, posix=sys.platform != "win32")
-        from _pytest import deprecated
-        warning = deprecated.MAIN_STR_ARGS
-    config = get_config()
-    pluginmanager = config.pluginmanager
-    try:
-        if plugins:
-            for plugin in plugins:
-                if isinstance(plugin, py.builtin._basestring):
-                    pluginmanager.consider_pluginarg(plugin)
-                else:
-                    pluginmanager.register(plugin)
-        if warning:
-            config.warn('C1', warning)
-        return pluginmanager.hook.pytest_cmdline_parse(
-                pluginmanager=pluginmanager, args=args)
-    except BaseException:
-        config._ensure_unconfigure()
-        raise
-
 
 class Config(object):
     """ access to configuration values, pluginmanager and plugin hooks.  """
@@ -101,6 +71,20 @@ class Config(object):
         self.pluginmanager = pluginmanager
         self.hook = self.pluginmanager.hook
         self.option = option
+        self.ebcfg = {}
+        self.detopts = ( 'prefix', 'optarch', 'module-naming-scheme' )
+
+        if self.option.ebcfg:
+            ebcfg = py.path.local(self.option.ebcfg)
+            if not ebcfg.check():
+                raise mpeb.exception.MPEBException("couldn't find %s" % ebcfg)
+            self.inicfg = py.iniconfig.IniConfig(self.option.ebcfg)
+            for opt in self.detopts:
+                try:
+                    self.ebcfg[opt] =  self.inicfg['easybuild'][opt]
+                except KeyError:
+                    print "missing opt %s" % opt
+        
 
 
     def get_terminal_writer(self):

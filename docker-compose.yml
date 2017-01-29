@@ -4,3 +4,14 @@ mpeb:
     - .:/software/mpeb
   environment:
     - PYTHONPATH=/software/mpeb
+  user: root
+mpebdev:
+  image: rjeschmi/easybuild-centos7:latest
+  volumes:
+    - .:/software/mpeb
+    - ../docker/build/generic/packages:/easybuild/packages
+    - ../sources:/easybuild/sources
+    - bash_history:/root/.bash_history
+  user: root
+  entrypoint: bash
+  working_dir: /software/mpeb
