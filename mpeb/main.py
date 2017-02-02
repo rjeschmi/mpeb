@@ -4,7 +4,6 @@ import py
 import os
 import sys
 import argparse
-import logging
 import traceback
 
 import mpeb.config as config

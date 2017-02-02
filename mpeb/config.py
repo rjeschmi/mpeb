@@ -4,7 +4,7 @@ import shlex
 import traceback
 import types
 import warnings
-
+import logging
 import py
 # DON't import pytest here because it causes import cycle troubles
 import sys, os
@@ -53,6 +53,7 @@ def parseconfig(args=None, plugins=()):
 
     # prepare command line options
     parser = Parser(subparser=True)
+    pm.hook.mpeb_addsubparser(parser=parser)
     pm.hook.mpeb_addoption(parser=parser)
 
     # parse command line options
@@ -73,8 +74,8 @@ class Config(object):
         self.option = option
         self.ebcfg = {}
         self.detopts = ( 'prefix', 'optarch', 'module-naming-scheme' )
-
-        if self.option.ebcfg:
+        
+        if self.option.eb and self.option.ebargs:
             ebcfg = py.path.local(self.option.ebcfg)
             if not ebcfg.check():
                 raise mpeb.exception.MPEBException("couldn't find %s" % ebcfg)
@@ -84,12 +85,34 @@ class Config(object):
                     self.ebcfg[opt] =  self.inicfg['easybuild'][opt]
                 except KeyError:
                     print "missing opt %s" % opt
-        
+        console = logging.StreamHandler()
+        self.log = logging.getLogger('mpeb')
+        if self.option.debug:
+            console.setLevel(logging.DEBUG)
+            self.log.setLevel(logging.DEBUG)
+        else:
+            console.setLevel(logging.INFO)
+            self.log.setLevel(logging.INFO)
 
+        formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
+        console.setFormatter(formatter)
+        self.log.addHandler(console)
+        self.log.info("Logging Set Up")
 
     def get_terminal_writer(self):
         return self.pluginmanager.get_plugin("terminalreporter")._tw
 
+    def get_sqlalchemy_url(self):
+        if self.option.dburl:
+            return self.option.dburl
+        elif self.inicfg['server']['dburl']:
+            return self.inicfg['server']['dburl']
+        else:
+            SystemExit("Cannot find DBURL")
+
+    def get_debug(self):
+        self.log.debug("getting debug %s", self.option)
+        return self.option.debug
 
 def create_terminal_writer(config, *args, **kwargs):
     """Create a TerminalWriter instance configured according to the options

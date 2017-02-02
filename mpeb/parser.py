@@ -33,6 +33,12 @@ class Parser:
         self.subparser[title]=self.subparsers.add_parser(title, description=description)
         return self.subparser[title]
 
+    def getsubparser(self, title):
+        return self.subparser[title]
+
+    def set_defaults(self, *args, **kwargs):
+        self.argparser.set_defaults(*args, **kwargs)
+
     def _parse_args(self, args):
         self.namespace, self.extra = self.argparser.parse_known_args(args)
         return self.namespace
