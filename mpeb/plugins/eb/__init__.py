@@ -25,14 +25,16 @@ def mpeb_addoption(parser):
     subparser.add_argument('--eb-demote', dest='demote', action='store_true')
     subparser.add_argument('--ebargs', dest='eb_args')
     subparser.add_argument('--ebcfg')
-    subparser.set_defaults(eb=True)
+    parser.set_defaults(eb=True)
 
 
 @mpeb.hookimpl
 def mpeb_cmdline_main(config):
+    config.log.debug("checking for eb commandline options")
     if config.option.eb:
         import mpeb.plugins.eb.eb_call as eb_call
         call_args = []
+        config.log.debug("got config.option.eb")
         if config.option.eb_args:
             call_args = config.option.eb_args.split()
         elif(config.extraargs is not None):
